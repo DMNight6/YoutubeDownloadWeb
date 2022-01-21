@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import Bar from './component/Navbar/Bar';
+import MainPage from './page/MainPage';
+import SearchDataPage from './page/SearchDataPage';
+import SearchPage from './page/SearchPage';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    <React.StrictMode>
+        <BrowserRouter>
+            <Bar />
+            <Routes>
+                <Route index element={<MainPage />} />
+                <Route exact path='search'>
+                    <Route index element={<SearchDataPage />} />
+                    <Route exact path=':data' element={<SearchPage />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </React.StrictMode>
+    , document.getElementById('root')
+)

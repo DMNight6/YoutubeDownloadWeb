@@ -25,7 +25,7 @@ const SearchPage = () => {
     React.useEffect(() => {
         GetVideo(text).then((data) => setData(data.map(data => {
             return (
-                <Grid key={data.videoURL} item xs={5} sm={6} md={4} lg={5}>
+                <Grid key={data.videoURL} item xs={6} sm={4} md={5} lg={6}>
                     <CardRender product={data} download={handleDownload} />
                 </Grid>
             )

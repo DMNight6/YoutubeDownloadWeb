@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { Typography, CardActions, IconButton, Card, CardContent, CardMedia, NativeSelect, Box } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
 const CardRender = ({product, download}) => { // I dunno what name I want to give so I'll call it product although it's data from backend
     const [Format, setFormat] = useState('.mp3');
+    const [audio, setAudio] = useState(undefined);
+    const [AudioState, setAudioState] = useState(false);
 
     const handleButton = async () => await download(product.videoURL, product.name, Format);
-
+    const handleAudio = async() => {
+        if (!audio) await setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}`));
+        if (typeof(audio) == 'object') AudioState ? audio.pause() : audio.play()
+        else return setAudioState(false)
+        setAudioState(!AudioState)
+    }
     return (
         <Card sx={{ display: 'flex'}}>
             <Box sx={{ display: 'flex', flexDirection: 'column'}}>
@@ -19,6 +28,9 @@ const CardRender = ({product, download}) => { // I dunno what name I want to giv
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1}}>
+                    <IconButton onClick={async (e) => await handleAudio()}>
+                        {AudioState ? <PauseIcon /> : <PlayArrowIcon />}
+                    </IconButton>
                     <CardActions>
                         <NativeSelect id='format' onChange={e => setFormat(e.target.value)}>
                             <option value='.mp3'>MP3</option>

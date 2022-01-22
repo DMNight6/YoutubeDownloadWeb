@@ -8,10 +8,11 @@ const CardRender = ({product, download}) => { // I dunno what name I want to giv
     const [Format, setFormat] = useState('.mp3');
     const [audio, setAudio] = useState(undefined);
     const [AudioState, setAudioState] = useState(false);
-
+    
     const handleButton = async () => await download(product.videoURL, product.name, Format);
+    const loadAudio = async (string) => {return await new Audio(string)}
     const handleAudio = async() => {
-        if (!audio) await setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}`));
+        if (!audio) setAudio(await loadAudio(`http://localhost:3001/audioRender/?name=${product.name}.mp3&link=${product.videoURL}`));
         if (typeof(audio) == 'object') AudioState ? audio.pause() : audio.play()
         else return setAudioState(false)
         setAudioState(!AudioState)

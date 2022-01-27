@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, CardActions, IconButton, Card, CardContent, CardMedia, NativeSelect, Box } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 
-const CardRender = ({product, download}) => { // I dunno what name I want to give so I'll call it product although it's data from backend
+const CardRender = ({product, download }) => { // I dunno what name I want to give so I'll call it product although it's data from backend
     const [Format, setFormat] = useState('.mp3');
-    const [audio, setAudio] = useState(undefined);
     const [AudioState, setAudioState] = useState(false);
-    
+    const [audio, setAudio] = useState();
+
+    useEffect(() => {
+        if (audio) audio.oncanplay = () => {
+            audio.play();
+            setAudioState(!AudioState)
+        }
+    }, [audio, AudioState]);
+
     const handleButton = async () => await download(product.videoURL, product.name, Format);
-    const loadAudio = async (string) => {return await new Audio(string)}
     const handleAudio = async() => {
-        if (!audio) setAudio(await loadAudio(`http://localhost:3001/audioRender/?name=${product.name}.mp3&link=${product.videoURL}`));
-        if (typeof(audio) == 'object') AudioState ? audio.pause() : audio.play()
-        else return setAudioState(false)
-        setAudioState(!AudioState)
+        if (!audio) { 
+            setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}.mp3`))
+        }
+        else { 
+            AudioState ? audio.pause() : audio.play()
+            setAudioState(!AudioState)
+        }
     }
+
     return (
         <Card sx={{ display: 'flex'}}>
             <Box sx={{ display: 'flex', flexDirection: 'column'}}>

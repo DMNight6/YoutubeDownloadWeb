@@ -10,9 +10,10 @@ const CardRender = ({product, download }) => { // I dunno what name I want to gi
     const [audio, setAudio] = useState();
 
     useEffect(() => {
-        if (audio) audio.oncanplay = () => {
-            audio.play();
-            setAudioState(!AudioState)
+        if (audio) {
+            audio.oncanplay = () => { if (!AudioState && !audio.onplaying) audio.play(); } 
+            audio.onplaying = () => setAudioState(true)
+            audio.onpause = () => setAudioState(false)
         }
     }, [audio, AudioState]);
 
@@ -22,8 +23,8 @@ const CardRender = ({product, download }) => { // I dunno what name I want to gi
             setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}.mp3`))
         }
         else { 
-            AudioState ? audio.pause() : audio.play()
-            setAudioState(!AudioState)
+            if (audio.paused && !AudioState) return audio.play()
+            if (!audio.paused && AudioState) return audio.pause()
         }
     }
 

@@ -28,7 +28,9 @@ const SearchPage = () => {
 
     if (!Data.length) return (
         <Container sx={{ display: 'flex', width: '100%'}}>
-            <></>
+            <Container sx={{ alignItems: 'center', justifyContent: 'center' }}>
+
+            </Container>
         </Container>
     ) // Render if text doesn't exist
     

@@ -20,7 +20,7 @@ const CardRender = ({product, download }) => { // I dunno what name I want to gi
     const handleButton = async () => await download(product.videoURL, product.name, Format);
     const handleAudio = async() => {
         if (!audio) { 
-            setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}.mp3`))
+            setAudio(new Audio(`http://localhost:3001/audioRender?link=${product.videoURL}&name=${product.name}`))
         }
         else { 
             if (audio.paused && !AudioState) return audio.play()
